@@ -21,7 +21,7 @@ from sqlalchemy import create_engine
 from mysql.connector.constants import ClientFlag
 from uuid import uuid4
 import yaml
-# from db_connection import get_database_connection
+from db_connection import get_database_connection
 
 st.set_page_config(
     page_title="Admission Form",
@@ -32,15 +32,15 @@ st.set_page_config(
 # database localhost connection
 # @st.cache()
 
-def get_database_connection():
-    db = mysql.connect(host = "remotemysql.com",
-                      user = "ivei3muPgO",
-                      passwd = "hyVJXcs55s",
-                      database = "ivei3muPgO",
-                      auth_plugin='mysql_native_password')
-    cursor = db.cursor()
+# def get_database_connection():
+#     db = mysql.connect(host = "remotemysql.com",
+#                       user = "ivei3muPgO",
+#                       passwd = "hyVJXcs55s",
+#                       database = "ivei3muPgO",
+#                       auth_plugin='mysql_native_password')
+#     cursor = db.cursor()
  
-    return cursor, db
+#     return cursor, db
  
 cursor, db = get_database_connection()
  
