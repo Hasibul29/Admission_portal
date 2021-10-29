@@ -20,6 +20,7 @@ import plotly.graph_objects as go
 from sqlalchemy import create_engine
 from mysql.connector.constants import ClientFlag
 from uuid import uuid4
+import yaml
  
 st.set_page_config(
     page_title="Admission Form",
@@ -29,15 +30,34 @@ st.set_page_config(
 )
 # database localhost connection
 # @st.cache()
+
+
+
+with open('credintials.yml', 'r') as f:
+    credintials = yaml.load(f, Loader=yaml.FullLoader)
+    db_credintials = credintials['db']
+    system_pass = credintials['system_pass']['admin']
+    # email_sender = credintials['email_sender']
+
+
 def get_database_connection():
-    db = mysql.connect(host = "remotemysql.com",
-                      user = "ivei3muPgO",
-                      passwd = "hyVJXcs55s",
-                      database = " ivei3muPgO",
-                      auth_plugin='mysql_native_password')
+    db = mysql.connect(host = db_credintials['host'],
+                      user = db_credintials['user'],
+                      passwd = db_credintials['passwd'],
+                      database = db_credintials['database'],
+                      auth_plugin= db_credintials['auth_plugin'])
     cursor = db.cursor()
- 
+
     return cursor, db
+# def get_database_connection():
+#     db = mysql.connect(host = "remotemysql.com",
+#                       user = "ivei3muPgO",
+#                       passwd = "hyVJXcs55s",
+#                       database = "ivei3muPgO",
+#                       auth_plugin='mysql_native_password')
+#     cursor = db.cursor()
+ 
+#     return cursor, db
  
 cursor, db = get_database_connection()
  
@@ -60,7 +80,7 @@ databases = cursor.fetchall() ## it returns a list of all databases present
 #                                               nationality varchar(255),
 #                                               r_date date,
 #                                               gpa varchar(255),
-#                                               religion varchar(255)),
+#                                               religion varchar(255),
 #                                               stat varchar(45)''')
 # cursor.execute("Select * from admission")
 # tables = cursor.fetchall()
