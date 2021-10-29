@@ -8,7 +8,7 @@ import base64
 import yagmail
 import re
 from re import search
-# import smtplib
+import smtplib
  
 import streamlit as st
 import streamlit.components.v1 as components
@@ -21,7 +21,8 @@ from sqlalchemy import create_engine
 from mysql.connector.constants import ClientFlag
 from uuid import uuid4
 import yaml
- 
+# from db_connection import get_database_connection
+
 st.set_page_config(
     page_title="Admission Form",
     page_icon=":sunny:",
@@ -31,43 +32,25 @@ st.set_page_config(
 # database localhost connection
 # @st.cache()
 
-
-
-with open('credintials.yml', 'r') as f:
-    credintials = yaml.load(f, Loader=yaml.FullLoader)
-    db_credintials = credintials['db']
-    system_pass = credintials['system_pass']['admin']
-    # email_sender = credintials['email_sender']
-
-
 def get_database_connection():
-    db = mysql.connect(host = db_credintials['host'],
-                      user = db_credintials['user'],
-                      passwd = db_credintials['passwd'],
-                      database = db_credintials['database'],
-                      auth_plugin= db_credintials['auth_plugin'])
+    db = mysql.connect(host = "remotemysql.com",
+                      user = "ivei3muPgO",
+                      passwd = "hyVJXcs55s",
+                      database = "ivei3muPgO",
+                      auth_plugin='mysql_native_password')
     cursor = db.cursor()
-
-    return cursor, db
-# def get_database_connection():
-#     db = mysql.connect(host = "remotemysql.com",
-#                       user = "ivei3muPgO",
-#                       passwd = "hyVJXcs55s",
-#                       database = "ivei3muPgO",
-#                       auth_plugin='mysql_native_password')
-#     cursor = db.cursor()
  
-#     return cursor, db
+    return cursor, db
  
 cursor, db = get_database_connection()
  
-cursor.execute("SHOW DATABASES")
+# cursor.execute("SHOW DATABASES")
  
-databases = cursor.fetchall() ## it returns a list of all databases present
+# databases = cursor.fetchall() ## it returns a list of all databases present
  
 # st.write(databases)
  
-# cursor.execute('''CREATE TABLE ADMISSION (nid varchar(25) PRIMARY KEY,
+# cursor.execute('''CREATE TABLE admission (nid varchar(25) PRIMARY KEY,
 #                                               sname varchar(255),
 #                                               father_name varchar(255),
 #                                               mother_name varchar(255),
@@ -182,11 +165,10 @@ def form(): #registration form
         religion=st.selectbox('Religion',('','Islam','Hinduism','Christianity','other'))
 
         if st.form_submit_button('Submit'):
-            query = f'''INSERT INTO ADMISSION (nid,sname,father_name,mother_name,address1,address2,phone,email,
+            query = f'''INSERT INTO admission (nid,sname,father_name,mother_name,address1,address2,phone,email,
                                                 gender,date_of_birth,nationality,r_date,gpa,religion) VALUES ('{nid}','{sname}',
                                                  '{father_name}','{mother_name}','{address1}','{address2}','{phone}','{email}',
                                                 '{gender}','{date_of_birth}','{nationality}','{r_date}','{gpa}','{religion}')'''
-            s=True
             cursor.execute(query)
             db.commit()
             st.success(f'Congratulation *{sname}*! You have successfully Registered')
@@ -216,7 +198,7 @@ def info():
             st.subheader('Result')
             for i in tables:
                 # st.write(i)
-                test=st.expander(f'Your Details',True)
+                test=st.expander('Your Details',True)
                 with test:
                     col1,col2=st.columns((2,3))
                     col1.write('ID')
