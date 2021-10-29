@@ -62,7 +62,7 @@ databases = cursor.fetchall() ## it returns a list of all databases present
 #                                               gpa varchar(255),
 #                                               religion varchar(255)),
 #                                               stat varchar(45)''')
-# cursor.execute("show tables from admissiondb")
+# cursor.execute("Select * from admission")
 # tables = cursor.fetchall()
 # st.write(tables)
 
@@ -91,59 +91,47 @@ def admin(): #admin panel
             # db.commit()
             tables =cursor.fetchall()
             size=len(tables)
-            st.write(size)
+            st.subheader(f'Result Found : {size}')
             # st.write(tables)
             j=1
             for i in tables:
                 # st.write(i)
-                name=i[1]
-                father_name=i[2]
-                mother_name=i[3]
-                gender=i[8]
-                phone=i[6]
-                email=i[7]
-                address1=i[4]
-                address2=i[5]
-                date_of_birth=i[9]
-                nationality=i[10]
-                gpa=i[12]
-                religion=i[13]
                 test=st.expander(f'Student {j}',True)
                 with test:
                     j+=1
                     col1,col2=st.columns((2,3))
                     col1.write('Name')
-                    col2.write(name)
+                    col2.write(i[1])
                     col1.write("Father's Name")
-                    col2.write(father_name)
+                    col2.write(i[2])
                     col1.write("Mother's Name")
-                    col2.write(mother_name)
+                    col2.write(i[3])
                     col1.write('Gender')
-                    col2.write(gender)
+                    col2.write(i[8])
                     col1.write('Contact No.')
-                    col2.write(phone)
+                    col2.write(i[6])
                     col1.write('Email')
-                    col2.write(email)
+                    col2.write(i[7])
                     col1.write('Present Address')
-                    col2.write(address1)
+                    col2.write(i[4])
                     col1.write('Permanent Address')
-                    col2.write(address2)
+                    col2.write(i[5])
                     col1.write('Date of Birth')
-                    col2.write(date_of_birth)
+                    col2.write(i[9])
                     col1.write('Nationality')
-                    col2.write(nationality)
+                    col2.write(i[10])
                     col1.write('GPA')
-                    col2.write(gpa)
+                    col2.write(i[12])
                     col1.write('Religion')
-                    col2.write(religion)
+                    col2.write(i[13])
                     Accept=st.button('Accept',key=i[0])
                     if Accept:
-                        st.write(i[0])
-                        cursor.execute("Update admission set stat='Accepted' where nid='4ef1afb2'")
+                        st.write('Accepted')
+                        cursor.execute(f"Update admission set stat='Accepted' where nid='{i[0]}'")
                         db.commit()
                     Reject=st.button('Reject',key=i[0])
                     if Reject:
-                        st.write('WA')
+                        st.write('Rejected')
                         cursor.execute(f"Update admission set stat='Rejected' where nid='{i[0]}'")
                         db.commit()
 
@@ -184,7 +172,7 @@ def form(): #registration form
             st.success(f'Congratulation *{sname}*! You have successfully Registered')
             st.write('')
             col1,col2=st.columns((5,2))
-            col1.info('You can Check your information From Check Information panel by using this code.You should save this code for further Uses.')
+            col1.info('You can Check your information From Check Information panel by using this code.You should save this code for further Uses.You can Check your status from Check status menu.')
             col2.code(nid)
             st.warning("Please Store this code!!!")
         
@@ -206,7 +194,40 @@ def info():
             cursor.execute(f"select * from admission where nid='{nid}'")
             tables = cursor.fetchall()
             st.subheader('Result')
-            st.write(tables)
+            for i in tables:
+                # st.write(i)
+                test=st.expander(f'Your Details',True)
+                with test:
+                    col1,col2=st.columns((2,3))
+                    col1.write('ID')
+                    col2.write(i[0])
+                    col1.write('Name')
+                    col2.write(i[1])
+                    col1.write("Father's Name")
+                    col2.write(i[2])
+                    col1.write("Mother's Name")
+                    col2.write(i[3])
+                    col1.write('Gender')
+                    col2.write(i[8])
+                    col1.write('Contact No.')
+                    col2.write(i[6])
+                    col1.write('Email')
+                    col2.write(i[7])
+                    col1.write('Present Address')
+                    col2.write(i[4])
+                    col1.write('Permanent Address')
+                    col2.write(i[5])
+                    col1.write('Date of Birth')
+                    col2.write(i[9])
+                    col1.write('Nationality')
+                    col2.write(i[10])
+                    col1.write('GPA')
+                    col2.write(i[12])
+                    col1.write('Religion')
+                    col2.write(i[13])
+                    col1.write('Registered Date:')
+                    col2.write(i[11])
+            # st.write(tables)
 
 
 def stat():
@@ -214,9 +235,21 @@ def stat():
     nid=st.text_input('Your Id')
     submit=st.button('Search',key='sub')
     if submit:
-        cursor.execute(f"Select stat from admission where nid='{nid}'")
+        cursor.execute(f"Select sname,stat from admission where nid='{nid}'")
         table=cursor.fetchall()
-        st.write(table)
+        with st.expander("",True):
+            for i in table:
+                col1,col2=st.columns((2,3))
+                col1.write('Name')
+                col2.write(i[0])
+                col1.write("Status")
+                if i[1]=='In Progress':
+                    col2.warning(i[1])
+                elif i[1]=='Accepted':
+                    col2.success(i[1])
+                    st.balloons()
+                else:
+                    col2.error(i[1])
 
 
 
