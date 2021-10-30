@@ -77,71 +77,148 @@ def admin(): #admin panel
         if username=="1" and password=='1':
             st.sidebar.success('Login Success')
             st.subheader('Admin Panel')
+            selected=st.sidebar.selectbox('History',
+                        ('Select...',
+                        'Accepted',
+                        'Rejected'
+                        ))
+            if selected=='Accepted':
+            	cursor.execute(f"select * from admission where stat='Accepted'")
+            	tab =cursor.fetchall()
+            	size=len(tab)
+            	st.subheader(f'Result Found : {size}')
+            	j=1
+            	for i in tab:
+            		test=st.expander(f'Student {j}',True)
+            		with test:
+            			j+=1
+            			col1,col2=st.columns((2,3))
+            			col1.write('Name')
+            			col2.write(i[1])
+            			col1.write("Father's Name")
+            			col2.write(i[2])
+            			col1.write("Mother's Name")
+            			col2.write(i[3])
+            			col1.write('Gender')
+            			col2.write(i[8])
+            			col1.write('Contact No.')
+            			col2.write(i[6])
+            			col1.write('Email')
+            			col2.write(i[7])
+            			col1.write('Present Address')
+            			col2.write(i[4])
+            			col1.write('Permanent Address')
+            			col2.write(i[5])
+            			col1.write('Date of Birth')
+            			col2.write(i[9])
+            			col1.write('Nationality')
+            			col2.write(i[10])
+            			col1.write('GPA')
+            			col2.write(i[12])
+            			col1.write('Religion')
+            			col2.write(i[13])
+            elif selected=='Rejected':
+            	cursor.execute(f"select * from admission where stat='Rejected'")
+            	tab =cursor.fetchall()
+            	size=len(tab)
+            	st.subheader(f'Result Found : {size}')
+            	j=1
+            	for i in tab:
+            		test=st.expander(f'Student {j}',True)
+            		with test:
+            			j+=1
+            			col1,col2=st.columns((2,3))
+            			col1.write('Name')
+            			col2.write(i[1])
+            			col1.write("Father's Name")
+            			col2.write(i[2])
+            			col1.write("Mother's Name")
+            			col2.write(i[3])
+            			col1.write('Gender')
+            			col2.write(i[8])
+            			col1.write('Contact No.')
+            			col2.write(i[6])
+            			col1.write('Email')
+            			col2.write(i[7])
+            			col1.write('Present Address')
+            			col2.write(i[4])
+            			col1.write('Permanent Address')
+            			col2.write(i[5])
+            			col1.write('Date of Birth')
+            			col2.write(i[9])
+            			col1.write('Nationality')
+            			col2.write(i[10])
+            			col1.write('GPA')
+            			col2.write(i[12])
+            			col1.write('Religion')
+            			col2.write(i[13])
+            else:
+	            col1,col,col2,col3=st.columns((2,0.2,2,1))
+	            date1=col1.date_input('',key="date1")
+	            col.write('')
+	            col.write('')
+	            col.write('')
+	            col.write('to')
+	            date2=col2.date_input('',key="date2")
+	            col3.write('')
+	            col3.write('')
+	            # submit=col3.form_submit_button()
+	            # if submit:
 
-            col1,col,col2,col3=st.columns((2,0.2,2,1))
-            date1=col1.date_input('Date1')
-            col.write('')
-            col.write('')
-            col.write('')
-            col.write('to')
-            date2=col2.date_input('Date2')
-            col3.write('')
-            col3.write('')
-            # submit=col3.form_submit_button()
-            # if submit:
-
-            cursor.execute(f"select * from admission where r_date between '{date1}' and '{date2}' and stat='In Progress'")
-            # db.commit()
-            tables =cursor.fetchall()
-            size=len(tables)
-            st.subheader(f'Result Found : {size}')
-            # st.write(tables)
-            j=1
-            for i in tables:
-                # st.write(i)
-                test=st.expander(f'Student {j}',True)
-                with test:
-                    j+=1
-                    col1,col2=st.columns((2,3))
-                    col1.write('Name')
-                    col2.write(i[1])
-                    col1.write("Father's Name")
-                    col2.write(i[2])
-                    col1.write("Mother's Name")
-                    col2.write(i[3])
-                    col1.write('Gender')
-                    col2.write(i[8])
-                    col1.write('Contact No.')
-                    col2.write(i[6])
-                    col1.write('Email')
-                    col2.write(i[7])
-                    col1.write('Present Address')
-                    col2.write(i[4])
-                    col1.write('Permanent Address')
-                    col2.write(i[5])
-                    col1.write('Date of Birth')
-                    col2.write(i[9])
-                    col1.write('Nationality')
-                    col2.write(i[10])
-                    col1.write('GPA')
-                    col2.write(i[12])
-                    col1.write('Religion')
-                    col2.write(i[13])
-                    Accept=st.button('Accept',key=i[0])
-                    if Accept:
-                        st.write('Accepted')
-                        cursor.execute(f"Update admission set stat='Accepted' where nid='{i[0]}'")
-                        db.commit()
-                    Reject=st.button('Reject',key=i[0])
-                    if Reject:
-                        st.write('Rejected')
-                        cursor.execute(f"Update admission set stat='Rejected' where nid='{i[0]}'")
-                        db.commit()
+	            cursor.execute(f"select * from admission where r_date between '{date1}' and '{date2}' and stat='In Progress'")
+	            # db.commit()
+	            tables =cursor.fetchall()
+	            size=len(tables)
+	            st.subheader(f'Result Found : {size}')
+	            # st.write(tables)
+	            j=1
+	            for i in tables:
+	                # st.write(i)
+	                test=st.expander(f'Student {j}',True)
+	                with test:
+	                    j+=1
+	                    col1,col2=st.columns((2,3))
+	                    col1.write('Name')
+	                    col2.write(i[1])
+	                    col1.write("Father's Name")
+	                    col2.write(i[2])
+	                    col1.write("Mother's Name")
+	                    col2.write(i[3])
+	                    col1.write('Gender')
+	                    col2.write(i[8])
+	                    col1.write('Contact No.')
+	                    col2.write(i[6])
+	                    col1.write('Email')
+	                    col2.write(i[7])
+	                    col1.write('Present Address')
+	                    col2.write(i[4])
+	                    col1.write('Permanent Address')
+	                    col2.write(i[5])
+	                    col1.write('Date of Birth')
+	                    col2.write(i[9])
+	                    col1.write('Nationality')
+	                    col2.write(i[10])
+	                    col1.write('GPA')
+	                    col2.write(i[12])
+	                    col1.write('Religion')
+	                    col2.write(i[13])
+	                    Accept=st.button('Accept',key=i[0])
+	                    if Accept:
+	                        st.success('Accepted')
+	                        cursor.execute(f"Update admission set stat='Accepted' where nid='{i[0]}'")
+	                        db.commit()
+	                    Reject=st.button('Reject',key=i[0])
+	                    if Reject:
+	                        st.error('Rejected')
+	                        cursor.execute(f"Update admission set stat='Rejected' where nid='{i[0]}'")
+	                        db.commit()
 
 
 
         else:
             st.sidebar.warning('Wrong Credintials')
+
+
 
 
 def form(): #registration form
@@ -234,24 +311,28 @@ def info():
 
 def stat():
     st.subheader('Check Status')
-    nid=st.text_input('Your Id')
-    submit=st.button('Search',key='sub')
-    if submit:
-        cursor.execute(f"Select sname,stat from admission where nid='{nid}'")
-        table=cursor.fetchall()
-        with st.expander("",True):
-            for i in table:
-                col1,col2=st.columns((2,3))
-                col1.write('Name')
-                col2.write(i[0])
-                col1.write("Status")
-                if i[1]=='In Progress':
-                    col2.warning(i[1])
-                elif i[1]=='Accepted':
-                    col2.success(i[1])
-                    st.balloons()
-                else:
-                    col2.error(i[1])
+    with st.form(key='stat'):
+        col1,col2=st.columns((4,2))
+        nid=col1.text_input('Your Code')
+        col2.write('')
+        col2.write('')
+        Submit=col2.form_submit_button(label='Search')
+        if Submit:
+	        cursor.execute(f"Select sname,stat from admission where nid='{nid}'")
+	        table=cursor.fetchall()
+	        with st.expander("Your Status",True):
+	            for i in table:
+	                col1,col2=st.columns((2,3))
+	                col1.write('Name')
+	                col2.write(i[0])
+	                col1.write("Status")
+	                if i[1]=='In Progress':
+	                    col2.warning(i[1])
+	                elif i[1]=='Accepted':
+	                    col2.success(i[1])
+	                    st.balloons()
+	                else:
+	                    col2.error(i[1])
 
 
 
@@ -259,7 +340,7 @@ def main():
     # col1,col2,col3=st.columns((1,5,1))
     st.title('Diploma in Data Science Admission Portal')
     st.subheader('International Islamic University Chittagong')
-    st.error('Updated version Coming Soon!!!')
+    # st.error('Updated version Coming Soon!!!')
     # st.sidebar.write('Menu')
     selected=st.sidebar.selectbox('Menu',
                         ('Select...',
